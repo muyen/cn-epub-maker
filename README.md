@@ -1,97 +1,99 @@
 # cn-epub-maker
 
-Convert Chinese novel TXT files to professional EPUB ebooks with vertical (直排) or horizontal layout.
+將中文小說 TXT 檔轉換為專業的直排（或橫排）EPUB 電子書。
 
-## Features
+[English](README.en.md)
 
-- **Auto-detect encoding** — GBK, GB18030, UTF-8, Big5
-- **Simplified → Traditional** conversion (via [OpenCC](https://github.com/BYVoid/OpenCC))
-- **Vertical right-to-left layout** — proper `writing-mode: vertical-rl` with RTL page progression, like a real Chinese book
-- **Smart junk removal** — auto-strips website ads, separator bars, and synopsis headers
-- **Chapter structure parsing** — detects `第X卷`, `第X章`, `第X回`, etc.
-- **Sequential renumbering** — fixes misnumbered/duplicate chapters in source files
-- **Chinese typography** — converts `""` → `「」`, `''` → `『』`, Arabic → Chinese numerals
-- **Cover image support**
-- **Customizable** — volume/chapter patterns, encoding, layout direction
+## 功能特色
 
-## Dependencies
+- **自動偵測編碼** — 支援 GBK、GB18030、UTF-8、Big5
+- **簡體轉繁體** — 透過 [OpenCC](https://github.com/BYVoid/OpenCC) 自動轉換
+- **直排右翻排版** — 正確的 `writing-mode: vertical-rl` 與 RTL 翻頁方向，如同實體中文書
+- **智慧去除垃圾內容** — 自動清除網站廣告、分隔線、內容簡介等
+- **章節結構解析** — 自動辨識 `第X卷`、`第X章`、`第X回` 等格式
+- **章節重新編號** — 修正來源檔案中的章節編號錯誤與重複
+- **中文排版規範** — `""` → `「」`、`''` → `『』`、阿拉伯數字轉中文數字
+- **封面圖片支援**
+- **高度自訂** — 可自訂卷/章正則表達式、編碼、排版方向
+
+## 安裝依賴
 
 ```bash
-# Required
+# 必要
 brew install pandoc
 
-# Optional (for Simplified → Traditional conversion)
+# 選用（簡轉繁功能需要）
 brew install opencc
 ```
 
-## Usage
+## 使用方式
 
 ```bash
-# Basic — auto-detect encoding, convert to Traditional, vertical layout:
+# 基本用法 — 自動偵測編碼，轉繁體，直排輸出：
 python3 cn_epub_maker.py novel.txt --title "書名" --author "作者"
 
-# With cover image:
+# 加入封面圖片：
 python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" --cover cover.png
 
-# Specify output path:
+# 指定輸出路徑：
 python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" -o output.epub
 
-# Already Traditional Chinese, skip conversion:
+# 來源已是繁體中文，跳過轉換：
 python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" --no-convert
 
-# Horizontal layout instead of vertical:
+# 使用橫排排版：
 python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" --horizontal
 
-# Keep original chapter numbers (don't renumber):
+# 保留原始章節編號（不重新編號）：
 python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" --no-renumber
 
-# Custom chapter pattern (e.g. 第X回 for classical novels):
+# 自訂章節格式（例如古典小說用「第X回」）：
 python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" \
   --chapter-pattern "^(?P<label>第.+回)[\s　]*(?P<title>.*)"
 
-# Keep Arabic numerals and original quotes:
+# 保留阿拉伯數字與原始引號：
 python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" --keep-arabic --keep-quotes
 ```
 
-## Options
+## 參數說明
 
-| Flag | Description |
-|------|-------------|
-| `-t, --title` | Book title (required) |
-| `-a, --author` | Author name (required) |
-| `-o, --output` | Output EPUB path |
-| `--cover` | Cover image (PNG/JPG) |
-| `--lang` | Language tag (default: `zh-Hant`) |
-| `--encoding` | Force source encoding |
-| `--no-convert` | Skip Simplified → Traditional |
-| `--horizontal` | Horizontal layout |
-| `--no-renumber` | Keep original chapter numbers |
-| `--keep-arabic` | Keep Arabic numerals |
-| `--keep-quotes` | Keep original quotation marks |
-| `--volume-pattern` | Custom volume heading regex |
-| `--chapter-pattern` | Custom chapter heading regex |
+| 參數 | 說明 |
+|------|------|
+| `-t, --title` | 書名（必填） |
+| `-a, --author` | 作者（必填） |
+| `-o, --output` | 輸出 EPUB 路徑 |
+| `--cover` | 封面圖片（PNG/JPG） |
+| `--lang` | 語言標籤（預設：`zh-Hant`） |
+| `--encoding` | 強制指定來源編碼 |
+| `--no-convert` | 跳過簡轉繁 |
+| `--horizontal` | 使用橫排排版 |
+| `--no-renumber` | 保留原始章節編號 |
+| `--keep-arabic` | 保留阿拉伯數字 |
+| `--keep-quotes` | 保留原始引號 |
+| `--volume-pattern` | 自訂卷標題正則表達式 |
+| `--chapter-pattern` | 自訂章標題正則表達式 |
 
-## How It Works
+## 運作原理
 
-1. **Read** the TXT file with auto-detected encoding
-2. **Convert** to Traditional Chinese via OpenCC (optional)
-3. **Strip** junk lines (ads, URLs, separators)
-4. **Parse** volume/chapter structure into Markdown
-5. **Renumber** chapters sequentially to fix source errors
-6. **Convert** punctuation and numerals to Chinese style
-7. **Generate** EPUB via pandoc with vertical CSS
-8. **Patch** EPUB spine for RTL page progression
+1. **讀取** TXT 檔案並自動偵測編碼
+2. **轉換** 為繁體中文（透過 OpenCC，可選）
+3. **清除** 垃圾內容（廣告、網址、分隔線）
+4. **解析** 卷/章結構，轉為 Markdown
+5. **重新編號** 章節，修正來源編號錯誤
+6. **轉換** 標點符號與數字為中文格式
+7. **生成** EPUB（透過 pandoc，搭配直排 CSS）
+8. **修補** EPUB spine 的 RTL 翻頁方向
 
-## Vertical Layout Details
+## 直排排版細節
 
-The vertical EPUB follows the [好讀 (Haodoo) vertical EPUB guidelines](https://haodoo.org/?p=16765):
+本工具遵循[好讀直式 EPUB 製作規範](https://haodoo.org/?p=16765)：
 
-- `writing-mode: vertical-rl` on all pages including title and TOC
-- `page-progression-direction="rtl"` in OPF spine
-- Standard horizontal punctuation (readers auto-rotate)
-- `text-orientation: mixed` for proper punctuation rendering
-- Songti TC font stack for Traditional Chinese
+- 所有頁面（含書名頁、目錄）皆套用 `writing-mode: vertical-rl`
+- OPF spine 設定 `page-progression-direction="rtl"`
+- 使用標準橫式標點（閱讀器會自動旋轉）
+- `text-orientation: mixed` 確保標點正確顯示
+- 宋體 TC 字型優先
 
-## License
+## 授權
 
 MIT
