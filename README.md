@@ -117,6 +117,43 @@ python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" --keep-arabic --keep-
 - 僅支援 Kindle 實體裝置，不支援 Kindle App
 - 原始字型由王漢宗教授捐贈，自由使用
 
+## ToneOZ 注音字型（破音字支援）
+
+本專案也附帶 **[澳聲通注音楷體](https://github.com/jeffreyxuan/toneoz-font-zhuyin)**（`fonts/ToneOZ-Zhuyin-Kai-Traditional.ttf`），基於思源宋體，採用 SIL Open Font License，無版權爭議。
+
+### 破音字自動選音
+
+搭配 `add_zhuyin_ivs.py` 腳本，可自動為 EPUB 中的破音字加入 IVS（異體字選擇器）標記。ToneOZ 字型會根據標記顯示正確的注音。
+
+```bash
+# 安裝依賴
+pip install pypinyin
+brew install opencc  # 用於簡繁轉換以提高破音字判斷準確度
+
+# 為 EPUB 加入 IVS 標記
+python3 add_zhuyin_ivs.py input.epub -o output_zhuyin.epub
+```
+
+### 原理
+
+1. **pypinyin** 分析上下文，判斷每個破音字的正確讀音（如「銀行」的行 = ㄏㄤˊ）
+2. 先轉簡體再分析，提高詞組匹配準確度
+3. 查詢 `phonic_table_Z.txt` 對照表，找到對應的 IVS 選擇器
+4. 在漢字後插入隱形的 Unicode 標記（如 `U+E01E1`）
+5. ToneOZ 字型看到標記，顯示對應讀音的注音
+
+### 字型修改內容
+
+與王漢宗字型相同的直排優化：
+- 標點符號字形替換為宋體繁，確保直排位置正確
+- 移除 `﹁﹂﹃﹄` 字形映射，搭配直排引號修正
+
+### 安裝方式
+
+1. 用 USB 連接 Kindle
+2. 將 `fonts/ToneOZ-Zhuyin-Kai-Traditional.ttf` 複製到 Kindle 的 `fonts` 資料夾
+3. 開書 → `Aa` → 選擇「ToneOZ-Zhuyin-Kai-Traditional」字型
+
 ## 授權
 
 MIT

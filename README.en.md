@@ -115,6 +115,43 @@ This font is based on the original HanWangKaiMediumChuIn, optimized for **vertic
 - Works on Kindle hardware only, not the Kindle app
 - Original font donated by Professor Wang Han-Tsung, free to use
 
+## ToneOZ Zhuyin Font (Polyphone Support)
+
+This project also includes **[ToneOZ Zhuyin Kai](https://github.com/jeffreyxuan/toneoz-font-zhuyin)** (`fonts/ToneOZ-Zhuyin-Kai-Traditional.ttf`), based on Source Han Serif under SIL Open Font License — no copyright concerns.
+
+### Automatic Polyphone Detection
+
+Use `add_zhuyin_ivs.py` to automatically add IVS (Ideographic Variation Selector) markers to EPUB files. The ToneOZ font reads these markers to display the correct pronunciation for polyphone characters.
+
+```bash
+# Install dependencies
+pip install pypinyin
+brew install opencc  # For T→S conversion to improve polyphone accuracy
+
+# Add IVS markers to EPUB
+python3 add_zhuyin_ivs.py input.epub -o output_zhuyin.epub
+```
+
+### How It Works
+
+1. **pypinyin** analyzes context to determine correct pronunciation (e.g. 銀**行** = ㄏㄤˊ not ㄒㄧㄥˊ)
+2. Converts to Simplified Chinese first for better phrase dictionary matching
+3. Looks up `phonic_table_Z.txt` to find the matching IVS selector
+4. Inserts invisible Unicode markers (e.g. `U+E01E1`) after each polyphone character
+5. ToneOZ font reads the marker and displays the correct Zhuyin annotation
+
+### Font Modifications
+
+Same vertical optimizations as the HanWang font:
+- Punctuation glyphs replaced with Songti TC for correct vertical positioning
+- `﹁﹂﹃﹄` glyph mappings removed for vertical bracket workaround
+
+### Installation
+
+1. Connect Kindle via USB
+2. Copy `fonts/ToneOZ-Zhuyin-Kai-Traditional.ttf` to Kindle's `fonts` folder
+3. Open a book → tap `Aa` → select "ToneOZ-Zhuyin-Kai-Traditional"
+
 ## License
 
 MIT
