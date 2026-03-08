@@ -236,8 +236,8 @@ html {
 }
 
 body {
-  font-family: "Songti TC", "Songti SC", "Noto Serif CJK TC",
-               "Source Han Serif TC", serif;
+  font-family: "Songti TC", "STSongTC", "Songti SC", "Noto Serif CJK TC",
+               "Source Han Serif TC";
   font-size: 1em;
   line-height: 1.8;
   margin: 1em;
