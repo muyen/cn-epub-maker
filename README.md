@@ -98,18 +98,18 @@ python3 cn_epub_maker.py novel.txt -t "書名" -a "作者" --keep-arabic --keep-
 
 本專案附帶修改版的**王漢宗中楷體注音**字型（`fonts/HanWangKaiMediumChuIn.ttf`），安裝到 Kindle 後，所有中文字都會自動顯示注音（ㄅㄆㄇㄈ）。
 
+### 字型修改內容
+
+此字型基於原版王漢宗中楷體注音，針對**直排顯示**做了以下優化：
+
+- **標點符號字形替換**：所有標點（`，。！？：；…—、《》〈〉（）「」『』`）替換為宋體繁（Songti TC）的字形，確保直排時位置正確、無多餘注音
+- **直排引號修正**：移除 `﹁﹂﹃﹄`（Unicode Vertical Presentation Forms）的字形映射，搭配 EPUB 內使用直排專用字符，Kindle 會用預設字型顯示引號（方向正確、不帶注音）
+
 ### 安裝方式
 
 1. 用 USB 連接 Kindle
 2. 將 `fonts/HanWangKaiMediumChuIn.ttf` 複製到 Kindle 根目錄的 `fonts` 資料夾（沒有就新建）
 3. 開啟任意中文書 → 點 `Aa`（頁面顯示）→ 選擇「HanWangKaiMediumChuIn」字型
-
-### 直排引號修正
-
-Kindle 在直排模式下，`「」『』` 可能無法正確旋轉。本專案的解決方式：
-
-- EPUB 內使用直排專用字符 `﹁﹂﹃﹄`（Unicode Vertical Presentation Forms）
-- 字型已移除這四個字符的字形映射，Kindle 會自動用預設字型顯示（不帶注音）
 
 ### 注意事項
 

@@ -96,18 +96,18 @@ The vertical EPUB follows the [好讀 (Haodoo) vertical EPUB guidelines](https:/
 
 This project includes a modified **HanWangKaiMediumChuIn** (王漢宗中楷體注音) font in `fonts/`. When installed on a Kindle, all Chinese characters automatically display with Zhuyin (ㄅㄆㄇㄈ) phonetic annotations.
 
+### Font Modifications
+
+This font is based on the original HanWangKaiMediumChuIn, optimized for **vertical text display**:
+
+- **Punctuation glyph replacement**: All punctuation marks (`，。！？：；…—、《》〈〉（）「」『』`) are replaced with Songti TC (宋體繁) glyphs, ensuring correct positioning in vertical layout without unwanted Zhuyin annotations
+- **Vertical bracket fix**: Removed glyph mappings for `﹁﹂﹃﹄` (U+FE41–FE44). When the EPUB uses these vertical presentation form characters, Kindle falls back to its default font (correct direction, no Zhuyin)
+
 ### Installation
 
 1. Connect Kindle via USB
 2. Copy `fonts/HanWangKaiMediumChuIn.ttf` to the `fonts` folder on Kindle root (create it if missing)
 3. Open any Chinese book → tap `Aa` (Page Display) → select "HanWangKaiMediumChuIn"
-
-### Vertical Bracket Fix
-
-Kindle may not correctly rotate `「」『』` in vertical mode. This project works around it by:
-
-- Using vertical presentation form characters `﹁﹂﹃﹄` (U+FE41–FE44) in the EPUB
-- Removing these glyphs from the font so Kindle falls back to its default font (no Zhuyin on brackets)
 
 ### Notes
 
